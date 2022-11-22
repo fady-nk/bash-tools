@@ -1,0 +1,23 @@
+#! /bin/bash
+PATH_TO_DIRSEARCH="/home/fady/tool/dirsearch"
+DNS=$1
+TODAY=$(date)
+echo "This scan was created on $TODAY"
+DIRECTORY=${DNS}_recon
+echo "creating directory $DIRECTORY."
+mkdir $DIRECTORY
+if [$2 =="nmap-only"]
+then
+  nmap -F $DNS > $DIRECTORY/nmap
+  echo "The results of nmap scan are stored in $DIRECTORY/nmap."
+elif [$2 =="dirsearch-only"]
+then
+  python3 $PATH_TO_DIRSEARCH/dirsearch.py -u $DNS -e php --output $DIRECTORY/dirsearch.txt 
+  echo "The results of dirsearch scan are stored in $DIRECTORY/dirsearch."
+else
+  nmap -F $DNS > $DIRECTORY/nmap
+  echo "The results of nmap scan are stored in $DIRECTORY/nmap."
+  python3 $PATH_TO_DIRSEARCH/dirsearch.py -u $DNS -e php --output $DIRECTORY/dirsearch.txt
+  echo "The results of dirsearch scan are stored in $DIRECTORY/dirsearch."
+fi 
+    
